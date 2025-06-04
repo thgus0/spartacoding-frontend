@@ -13,8 +13,10 @@ export const TodoForm = ({
   const { initForm, updateDeadline, updateTodo, todo, deadline } =
     useTodoForm();
 
+  const isValidLength = todo.trim().length > 0 && todo.trim().length <= 100;
+
   const handleAddTodo = () => {
-    if (!(todo.trim() && deadline)) return;
+    if (!(isValidLength && deadline)) return;
 
     setTodos([
       ...todos,
@@ -35,7 +37,11 @@ export const TodoForm = ({
         variant="outlined"
         fullWidth
         value={todo}
-        onChange={(e) => updateTodo(e.target.value)}
+        onChange={(e) => {
+          if(e.target.value.length <= 100) {
+            updateTodo(e.target.value);
+          }
+        }}
         style={{ marginBottom: '1rem' }}
       />
       <TextField
@@ -55,7 +61,7 @@ export const TodoForm = ({
         color="primary"
         onClick={handleAddTodo}
         fullWidth
-        disabled={!todo.trim() || !deadline}
+        disabled={!(isValidLength && !deadline)}
       >
         Add Todo
       </Button>
