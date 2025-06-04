@@ -15,8 +15,11 @@ export const TodoForm = ({
 
   const isValidLength = todo.trim().length > 0 && todo.trim().length <= 100;
 
+  const today = new Date().toISOString().slice(0, 10);
+  const isValidDate = deadline && deadline >= today;
+
   const handleAddTodo = () => {
-    if (!(isValidLength && deadline)) return;
+    if (!(isValidLength && isValidDate)) return;
 
     setTodos([
       ...todos,
@@ -54,6 +57,9 @@ export const TodoForm = ({
           const selectedDate = e.target.value;
           updateDeadline(selectedDate);
         }}
+        inputProps={{
+          min: today,
+        }}
         style={{ marginBottom: '1rem' }}
       />
       <Button
@@ -61,7 +67,7 @@ export const TodoForm = ({
         color="primary"
         onClick={handleAddTodo}
         fullWidth
-        disabled={!(isValidLength && !deadline)}
+        disabled={!(isValidLength && isValidDate)}
       >
         Add Todo
       </Button>
